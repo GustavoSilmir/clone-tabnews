@@ -7,3 +7,5 @@ function teste2() {
 }
 
 export default Home;
+
+//comentando para testar o deploy sem proteção da vercel
