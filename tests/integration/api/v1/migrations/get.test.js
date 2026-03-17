@@ -1,9 +1,10 @@
 import database from "infra/database.js";
+import orchestrator from "../orchestrator";
 
-beforeAll(cleanDatabase);
-async function cleanDatabase() {
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
   await database.query("drop schema public cascade; create schema public");
-}
+});
 
 database.query("SELECT 1+1");
 
