@@ -1,5 +1,5 @@
 import { version as uuidVersion } from "uuid";
-import orchestrator from "../orchestrator";
+import orchestrator from "../orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -16,9 +16,9 @@ describe("POST /api/v1/users", () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: "gustavomiranda",
-          email: "teste@teste.com",
-          password: "senha@123123",
+          username: "filipedeschamps",
+          email: "contato@curso.dev",
+          password: "senha123",
         }),
       });
 
@@ -28,9 +28,9 @@ describe("POST /api/v1/users", () => {
 
       expect(responseBody).toEqual({
         id: responseBody.id,
-        username: "gustavomiranda",
-        email: "teste@teste.com",
-        password: "senha@123123",
+        username: "filipedeschamps",
+        email: "contato@curso.dev",
+        password: "senha123",
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -40,7 +40,7 @@ describe("POST /api/v1/users", () => {
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
     });
 
-    test("With duplicated 'email", async () => {
+    test("With duplicated 'email'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -48,12 +48,13 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "emailduplicado1",
-          email: "duplicado@teste.com",
-          password: "senha@123123",
+          email: "duplicado@curso.dev",
+          password: "senha123",
         }),
       });
 
       expect(response1.status).toBe(201);
+
       const response2 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -61,8 +62,8 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "emailduplicado2",
-          email: "Duplicado@teste.com",
-          password: "senha@123123",
+          email: "Duplicado@curso.dev",
+          password: "senha123",
         }),
       });
 
@@ -72,13 +73,13 @@ describe("POST /api/v1/users", () => {
 
       expect(response2Body).toEqual({
         name: "ValidationError",
-        message: "O email informado já esta sendo utilizado.",
-        action: "Utilize outro email para realizar o cadastro",
+        message: "O email informado já está sendo utilizado.",
+        action: "Utilize outro email para realizar o cadastro.",
         status_code: 400,
       });
     });
 
-    test("With duplicated 'username", async () => {
+    test("With duplicated 'username'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -86,12 +87,13 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "usernameduplicado",
-          email: "usernameduplicado@teste.com",
-          password: "senha@123123",
+          email: "usernameduplicado1@curso.dev",
+          password: "senha123",
         }),
       });
 
       expect(response1.status).toBe(201);
+
       const response2 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -99,8 +101,8 @@ describe("POST /api/v1/users", () => {
         },
         body: JSON.stringify({
           username: "UsernameDuplicado",
-          email: "usernameduplicado2@teste.com",
-          password: "senha@123123",
+          email: "usernameduplicado2@curso.dev",
+          password: "senha123",
         }),
       });
 
@@ -110,8 +112,8 @@ describe("POST /api/v1/users", () => {
 
       expect(response2Body).toEqual({
         name: "ValidationError",
-        message: "O username informado já está sendo utilizado",
-        action: "Utilize outro username para realizar o cadastro",
+        message: "O username informado já está sendo utilizado.",
+        action: "Utilize outro username para realizar o cadastro.",
         status_code: 400,
       });
     });
