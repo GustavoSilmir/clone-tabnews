@@ -17,14 +17,14 @@ async function findOneByUsername(username) {
           LOWER(username) = LOWER($1)
         LIMIT
           1
-         ;`,
+        ;`,
       values: [username],
     });
 
     if (results.rowCount === 0) {
       throw new NotFoundError({
-        message: "O username informado não foi encontrado no sistema",
-        action: "Verifique se o username está digitado corretamente",
+        message: "O username informado não foi encontrado no sistema.",
+        action: "Verifique se o username está digitado corretamente.",
       });
     }
 
@@ -48,14 +48,14 @@ async function create(userInputValues) {
           users
         WHERE
           LOWER(email) = LOWER($1)
-         ;`,
+        ;`,
       values: [email],
     });
 
     if (results.rowCount > 0) {
       throw new ValidationError({
-        message: "O email informado já esta sendo utilizado.",
-        action: "Utilize outro email para realizar o cadastro",
+        message: "O email informado já está sendo utilizado.",
+        action: "Utilize outro email para realizar o cadastro.",
       });
     }
   }
@@ -69,14 +69,14 @@ async function create(userInputValues) {
           users
         WHERE
           LOWER(username) = LOWER($1)
-         ;`,
+        ;`,
       values: [username],
     });
 
     if (results.rowCount > 0) {
       throw new ValidationError({
-        message: "O username informado já está sendo utilizado",
-        action: "Utilize outro username para realizar o cadastro",
+        message: "O username informado já está sendo utilizado.",
+        action: "Utilize outro username para realizar o cadastro.",
       });
     }
   }
@@ -84,20 +84,19 @@ async function create(userInputValues) {
   async function runInsertQuery(userInputValues) {
     const results = await database.query({
       text: `
-        INSERT INTO 
-        users (username, email, password)
-         VALUES
+        INSERT INTO
+          users (username, email, password)
+        VALUES
           ($1, $2, $3)
-          RETURNING
-            *
-          ;`,
+        RETURNING
+          *
+        ;`,
       values: [
         userInputValues.username,
         userInputValues.email,
         userInputValues.password,
       ],
     });
-
     return results.rows[0];
   }
 }

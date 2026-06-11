@@ -1,5 +1,5 @@
 import { version as uuidVersion } from "uuid";
-import orchestrator from "../../orchestrator";
+import orchestrator from "../../orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -17,12 +17,13 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "MesmoCase",
-          email: "mesmo.case@teste.com",
-          password: "senha@123123",
+          email: "mesmo.case@curso.dev",
+          password: "senha123",
         }),
       });
 
       expect(response1.status).toBe(201);
+
       const response2 = await fetch(
         "http://localhost:3000/api/v1/users/MesmoCase",
       );
@@ -34,8 +35,8 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "MesmoCase",
-        email: "mesmo.case@teste.com",
-        password: "senha@123123",
+        email: "mesmo.case@curso.dev",
+        password: "senha123",
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
       });
@@ -53,12 +54,13 @@ describe("GET /api/v1/users/[username]", () => {
         },
         body: JSON.stringify({
           username: "CaseDiferente",
-          email: "case.diferente@teste.com",
-          password: "senha@123123",
+          email: "case.diferente@curso.dev",
+          password: "senha123",
         }),
       });
 
       expect(response1.status).toBe(201);
+
       const response2 = await fetch(
         "http://localhost:3000/api/v1/users/casediferente",
       );
@@ -70,8 +72,8 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response2Body).toEqual({
         id: response2Body.id,
         username: "CaseDiferente",
-        email: "case.diferente@teste.com",
-        password: "senha@123123",
+        email: "case.diferente@curso.dev",
+        password: "senha123",
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
       });
@@ -92,8 +94,8 @@ describe("GET /api/v1/users/[username]", () => {
 
       expect(responseBody).toEqual({
         name: "NotFoundError",
-        message: "O username informado não foi encontrado no sistema",
-        action: "Verifique se o username está digitado corretamente",
+        message: "O username informado não foi encontrado no sistema.",
+        action: "Verifique se o username está digitado corretamente.",
         status_code: 404,
       });
     });
