@@ -4,7 +4,6 @@ import { ValidationError, NotFoundError } from "infra/errors.js";
 
 async function findOneById(id) {
   const userFound = await runSelectQuery(id);
-
   return userFound;
 
   async function runSelectQuery(id) {
@@ -35,7 +34,6 @@ async function findOneById(id) {
 
 async function findOneByUsername(username) {
   const userFound = await runSelectQuery(username);
-
   return userFound;
 
   async function runSelectQuery(username) {
@@ -66,7 +64,6 @@ async function findOneByUsername(username) {
 
 async function findOneByEmail(email) {
   const userFound = await runSelectQuery(email);
-
   return userFound;
 
   async function runSelectQuery(email) {
@@ -123,6 +120,7 @@ async function create(userInputValues) {
     });
     return results.rows[0];
   }
+
   function injectDefaultFeaturesInObject(userInputValues) {
     userInputValues.features = ["read:activation_token"];
   }
@@ -160,9 +158,9 @@ async function update(username, userInputValues) {
         updated_at = timezone('utc', now())
       WHERE
         id = $1
-        RETURNING
-          *
-      `,
+      RETURNING
+        *
+      ;`,
       values: [
         userWithNewValues.id,
         userWithNewValues.username,
@@ -171,6 +169,30 @@ async function update(username, userInputValues) {
       ],
     });
 
+    return results.rows[0];
+  }
+}
+
+// Movemos a função setFeatures para o nível superior do módulo
+async function setFeatures(userId, features) {
+  const updatedUser = await runSetFeaturesQuery(userId, features);
+  return updatedUser;
+
+  async function runSetFeaturesQuery(userId, features) {
+    const results = await database.query({
+      text: `
+        UPDATE
+          users
+        SET
+          features = $2,
+          updated_at = timezone('utc', now())
+        WHERE
+          id = $1
+        RETURNING
+          *
+      ;`,
+      values: [userId, features],
+    });
     return results.rows[0];
   }
 }
@@ -223,6 +245,7 @@ async function hashPasswordInObject(userInputValues) {
 }
 
 const user = {
+  setFeatures,
   create,
   findOneById,
   findOneByUsername,
