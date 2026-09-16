@@ -173,12 +173,11 @@ async function update(username, userInputValues) {
   }
 }
 
-// Movemos a função setFeatures para o nível superior do módulo
 async function setFeatures(userId, features) {
-  const updatedUser = await runSetFeaturesQuery(userId, features);
+  const updatedUser = await runUpdateQuery(userId, features);
   return updatedUser;
 
-  async function runSetFeaturesQuery(userId, features) {
+  async function runUpdateQuery(userId, features) {
     const results = await database.query({
       text: `
         UPDATE

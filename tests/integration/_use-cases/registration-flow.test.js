@@ -1,7 +1,7 @@
 import activation from "models/activation";
 import orchestrator from "../api/v1/orchestrator";
 import webserver from "infra/webserver";
-import { user } from "pg/lib/defaults";
+import user from "models/user"; // Alterado: import correto do model (auto-import puxava pg/lib/defaults)
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -69,7 +69,7 @@ describe("Use case: Registration Flow (all successful)", () => {
         method: "PATCH",
       },
     );
-    console.log(activationResponse.status);
+
     expect(activationResponse.status).toBe(200);
 
     const activationResponseBody = await activationResponse.json();
