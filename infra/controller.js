@@ -1,6 +1,7 @@
 import * as cookie from "cookie";
 import session from "models/session.js";
 import user from "models/user.js";
+import authorization from "models/authorization.js";
 
 import {
   InternalServerError,
@@ -95,7 +96,7 @@ function injectAnonymousUser(request) {
 function canRequest(feature) {
   return function canRequestMiddleware(request, response, next) {
     const userTryinToRequest = request.context.user;
-    if (userTryinToRequest.features.includes(feature)) {
+    if (authorization.can(userTryinToRequest, feature)) {
       return next();
     }
 
