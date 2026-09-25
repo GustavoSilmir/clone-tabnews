@@ -112,11 +112,11 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
 
       expect(responseBody).toEqual({
         id: activationToken.id,
-        used_at: responseBody.used_at,
         user_id: activationToken.user_id,
-        expires_at: activationToken.expires_at.toISOString(),
         created_at: activationToken.created_at.toISOString(),
         updated_at: responseBody.updated_at,
+        expires_at: activationToken.expires_at.toISOString(),
+        used_at: responseBody.used_at,
       });
 
       expect(uuidVersion(responseBody.id)).toBe(4);
@@ -139,6 +139,7 @@ describe("PATCH /api/v1/activations/[token_id]", () => {
       expect(activatedUser.features).toEqual([
         "create:session",
         "read:session",
+        "update:user",
       ]);
     });
 
