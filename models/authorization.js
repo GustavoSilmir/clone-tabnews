@@ -47,7 +47,6 @@ function filterOutput(user, feature, resource) {
     return {
       id: resource.id,
       username: resource.username,
-
       features: resource.features,
       created_at: resource.created_at,
       updated_at: resource.updated_at,
